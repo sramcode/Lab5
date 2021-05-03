@@ -5,8 +5,8 @@
 
 ## Part 1:
 
-LINK TO YOUR PUBLISHED SITE
+[My Meme Generator](https://sramcode.github.io/Lab5/)
 
 ## Part 2:
 
-LINK TO YOUR PART 2 REPOSITORY
+[My Latest Issue](https://github.com/sramcode/github-actions-for-ci/issues/7)
