@@ -1,5 +1,6 @@
 // script.js
 
+//on starting the page
 const img = new Image(); // used to load image from <input> and draw to canvas
 const canvas = document.getElementById('user-image');
 const ctx = canvas.getContext('2d');
@@ -8,16 +9,17 @@ populateVoiceList();
 document.getElementById('voice-selection').disabled = false;
 
   if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    
+    //removes the first no options selection
     let x = document.getElementById("voice-selection");
     x.remove(0);
 
     speechSynthesis.onvoiceschanged = populateVoiceList;
     
   }
+
 // Fires whenever the img object loads a new image (such as with img.src =)
-img.addEventListener('load', () => {
-  // TODO
-  
+img.addEventListener('load', () => {  
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   ctx.fillStyle = 'black';
@@ -33,37 +35,32 @@ img.addEventListener('load', () => {
   c.disabled = false;
   r.disabled = false;
   b.disabled = true;
-
-  // Some helpful tips:
-  // - Fill the whole Canvas with black first to add borders on non-square images, then draw on top
-  // - Clear the form when a new image is selected
-  // - If you draw the image to canvas here, it will update as soon as a new image is selected
 });
 
-
+//event listener for the image input
 const input = document.getElementById('image-input');
-
 input.addEventListener('change', onChange);
-//img.src = "./images/mountains.jpg";
+
 function onChange(e) {
   img.src = URL.createObjectURL(input.files[0]);
   img.alt = img.src.substring(img.src.lastIndexOf('/')+1);
 }
 
 
-
+//event listener for generate 
 const submit = document.getElementById("generate-meme");
 submit.addEventListener('submit', event => {
 
   let topText = document.getElementById('text-top').value;
-let bottomText = document.getElementById('text-bottom').value;
-console.log(topText);
-console.log(bottomText);
+  let bottomText = document.getElementById('text-bottom').value;
+  console.log(topText);
+  console.log(bottomText);
+    
   ctx.font = "30px Arial";
   ctx.fillStyle = "white";
   ctx.textAlign = "center"; 
 
-  
+    
   ctx.fillText(topText.toUpperCase(), canvas.width/2, 50);
   ctx.fillText(bottomText.toUpperCase(), canvas.width/2, canvas.height - 25);
   ctx.strokeText(topText.toUpperCase(), canvas.width/2, 50);
@@ -83,40 +80,39 @@ console.log(bottomText);
 
 
 
-
+//event listener for clear
 const clear = document.querySelector("[type='reset']");
-clear.addEventListener('click', event => {
 
+clear.addEventListener('click', event => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   document.querySelector("[type='reset']").disabled = true;
   document.querySelector("[type='button']").disabled = true;
-
   document.querySelector("[type='submit']").disabled = false;
-
-  
-  
 });
 
-
+//event listener for read text
 const read = document.querySelector("[type='button']");
+
 read.addEventListener('click', event => {
   let topText = document.getElementById('text-top').value;
   let bottomText = document.getElementById('text-bottom').value;
   let text = topText + bottomText;
+  
   let utterance = new SpeechSynthesisUtterance(text);
   let l = document.getElementById("voice-selection").value;
   l = l.substring(l.indexOf('(')+1, l.length - 1);
   console.log(l);
-  //var language = l.options[l.selectedIndex].text;
+  
   let vol = document.querySelector("[type='range']").value;
   utterance.volume = vol / 100;
   utterance.lang = l;
 
   console.log(vol);
   speechSynthesis.speak(utterance);
-  
 });
 
+
+//gets the voice selections
 function populateVoiceList() {
   if(typeof speechSynthesis === 'undefined') {
     return;
@@ -138,12 +134,13 @@ function populateVoiceList() {
   }
 }
 
+//event listener for the volume slider
 const range = document.querySelector("[type='range']");
 range.addEventListener('input', updateIcon);
 
 function updateIcon(e) {
   let vol = range.value;
- console.log(vol);
+  console.log(vol);
 
   if(vol >= 67 && vol <= 100) {
     let icon = document.querySelector("#volume-group > img");
